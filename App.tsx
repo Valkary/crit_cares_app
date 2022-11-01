@@ -1,21 +1,19 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as eva from "@eva-design/eva";
+import { ApplicationProvider } from "@ui-kitten/components";
+import ServerProvider from "./contexts/ServerContext";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>No tienes idea lo dificil que fue hacer funcionar todo esto en Linux</Text>
-      <Text>cum</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+const queryClient = new QueryClient();
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import LoginScreen from "./components/pages/LoginScreen";
+
+export default () => (
+  <ApplicationProvider {...eva} theme={eva.light}>
+    <QueryClientProvider client={queryClient}>
+      <ServerProvider>
+        <LoginScreen />
+      </ServerProvider>
+    </QueryClientProvider>
+  </ApplicationProvider>
+);
+
