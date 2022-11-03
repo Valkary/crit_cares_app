@@ -1,7 +1,8 @@
 import * as eva from "@eva-design/eva";
 import { ApplicationProvider } from "@ui-kitten/components";
-import ServerProvider from "./contexts/ServerContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import ServerProvider from "./contexts/ServerContext";
+import UserProvider from "./contexts/UserContext";
 
 const queryClient = new QueryClient();
 
@@ -11,7 +12,9 @@ export default () => (
   <ApplicationProvider {...eva} theme={eva.light}>
     <QueryClientProvider client={queryClient}>
       <ServerProvider>
-        <LoginScreen />
+        <UserProvider>
+          <LoginScreen />
+        </UserProvider>
       </ServerProvider>
     </QueryClientProvider>
   </ApplicationProvider>

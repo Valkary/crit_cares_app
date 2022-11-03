@@ -1,12 +1,13 @@
 import { Layout, Text, Input, Button, Spinner } from "@ui-kitten/components";
 import { useState, useContext } from "react";
 import { ServerContext } from "../../contexts/ServerContext";
+import { UserContext } from "../../contexts/UserContext";
 import { View, StyleSheet } from 'react-native';
 import axios from "axios";
 
 import { useMutation } from "@tanstack/react-query";
 
-const LoadingIndicator = (props) => (
+const LoadingIndicator = (props: any) => (
   <View style={[props.style, styles.indicator]}>
     <Spinner size='small' />
   </View>
@@ -17,6 +18,7 @@ const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState('');
 
   const serverUrl = useContext(ServerContext);
+  const { changeUser } = useContext(UserContext);
 
   interface loginData {
     user_id: number,
@@ -28,7 +30,10 @@ const LoginScreen: React.FC = () => {
   });
 
   if (isError) console.log(error)
-  if (isSuccess) console.log("Success!", data?.data);
+  if (isSuccess) {
+    const { message } = data?.data;
+    changeUser(message);
+  }
 
   return (
     <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingHorizontal: '7.5%' }}>
