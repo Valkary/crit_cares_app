@@ -36,19 +36,29 @@ const UserProvider: FunctionComponent<{ children: ReactNode }> = ({ children }) 
 
   useEffect(() => {
     if (token) {
-      const user_creds = jwtDecode<UserCreds>(token);
+      const stringValidation = z.string().safeParse(token);
+      if (stringValidation.success) {
+        try {
+          const user_creds = jwtDecode<UserCreds>(token);
 
-      try {
-        UserCredsObject.parse(user_creds);
-      } catch(error) {
-        setUser(base_user);
-        setToken("");
-        return;
+          try {
+            UserCredsObject.parse(user_creds);
+          } catch (error) {
+            console.error(error);
+            setUser(base_user);
+            setToken("");
+            return;
+          }
+
+          setUser(user_creds);
+          setToken(token);
+        } catch (error) {
+          console.error(error);
+          return;
+        }
+      } else {
+        console.error(stringValidation.error);
       }
-      
-      setUser(user_creds);
-      setToken(token);
-      return;
     }
   }, [token]);
 

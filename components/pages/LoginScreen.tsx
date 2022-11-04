@@ -31,8 +31,13 @@ const LoginScreen: React.FC = () => {
 
   if (isError) console.log(error)
   if (isSuccess) {
-    const { message } = data?.data;
-    setToken(message);
+    const { message, success } = data?.data;
+
+    if (success) {
+      setToken(message);
+    } else {
+      // TODO: handle wrong login
+    }
   }
 
   return (
@@ -49,7 +54,7 @@ const LoginScreen: React.FC = () => {
         secureTextEntry
       />
       <Button
-        onPress={() => mutate({ user_id: username, pass: password })}
+        onPress={() => mutate({ user_id: parseInt(username, 10), pass: password })}
         accessoryLeft={isLoading ? LoadingIndicator : <></>}
         appearance="outline"
       >{isLoading ? "Logging in..." : "Log in"}</Button>
