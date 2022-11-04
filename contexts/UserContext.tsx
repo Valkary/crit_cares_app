@@ -1,4 +1,4 @@
-import { createContext, FunctionComponent, ReactNode, useState } from 'react';
+import { createContext, FunctionComponent, ReactNode, useEffect, useState } from 'react';
 import { z } from "zod";
 import jwtDecode from 'jwt-decode';
 
@@ -21,41 +21,42 @@ const base_user: UserCreds = {
 interface UserContext {
   token: string,
   user: UserCreds,
-  changeUser: (_: string) => void
+  setToken: (_: string) => void
 }
 
 export const UserContext = createContext<UserContext>({
   token: "",
   user: base_user,
-  changeUser: (_: string) => { }
+  setToken: (_: string) => { }
 });
 
 const UserProvider: FunctionComponent<{ children: ReactNode }> = ({ children }) => {
   const [token, setToken] = useState("");
   const [user, setUser] = useState<UserCreds>(base_user);
 
-  const changeUser = (token: string) => {
-    const user_creds: UserCreds = jwtDecode(token);
+  useEffect(() => {
+    if (token) {
+      const user_creds = jwtDecode<UserCreds>(token);
 
-    try {
-      UserCredsObject.parse(user_creds);
-    } catch(error) {
-      setUser(base_user);
-      setToken("");
+      try {
+        UserCredsObject.parse(user_creds);
+      } catch(error) {
+        setUser(base_user);
+        setToken("");
+        return;
+      }
+      
+      setUser(user_creds);
+      setToken(token);
       return;
     }
-    
-    setUser(user_creds);
-    setToken(token);
-    console.log("NEW CONTEXT:", token, user);
-    return;
-  }
+  }, [token]);
 
   return (
-    <UserContext.Provider value={{ token, user, changeUser }}>
+    <UserContext.Provider value={{ token, user, setToken }}>
       {children}
     </UserContext.Provider>
   )
-}
+};
 
 export default UserProvider;

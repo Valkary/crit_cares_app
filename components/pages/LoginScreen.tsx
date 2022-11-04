@@ -18,7 +18,7 @@ const LoginScreen: React.FC = () => {
   const [password, setPassword] = useState('');
 
   const serverUrl = useContext(ServerContext);
-  const { changeUser } = useContext(UserContext);
+  const { setToken } = useContext(UserContext);
 
   interface loginData {
     user_id: number,
@@ -32,7 +32,7 @@ const LoginScreen: React.FC = () => {
   if (isError) console.log(error)
   if (isSuccess) {
     const { message } = data?.data;
-    changeUser(message);
+    setToken(message);
   }
 
   return (
@@ -49,7 +49,7 @@ const LoginScreen: React.FC = () => {
         secureTextEntry
       />
       <Button
-        onPress={() => mutate({ user_id: 1, pass: "adminssupersecurepwd1" })}
+        onPress={() => mutate({ user_id: username, pass: password })}
         accessoryLeft={isLoading ? LoadingIndicator : <></>}
         appearance="outline"
       >{isLoading ? "Logging in..." : "Log in"}</Button>
