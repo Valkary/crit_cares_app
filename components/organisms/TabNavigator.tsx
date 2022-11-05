@@ -4,15 +4,11 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { UserContext } from '../../contexts/UserContext';
 import BottomTabs from "./BottomTabs";
+
+import PatientsScreen from '../pages/PatientsScreen';
 import LoginScreen from '../pages/LoginScreen';
 
 const { Navigator, Screen } = createBottomTabNavigator();
-
-const PatientsScreen = () => (
-  <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-    <Text category='h1'>PATIENTS</Text>
-  </Layout>
-);
 
 const AppointmentsScreen = () => (
   <Layout style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
